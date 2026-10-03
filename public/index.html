@@ -3,31 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Temporal assessment starter</title>
+    <title>Juniper Salon · Openings</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main>
-      <p class="eyebrow">Temporal assessment starter</p>
-      <h1>Your environment is connected.</h1>
-      <p class="intro">
-        This neutral demonstration starts a Workflow, waits durably for a
-        Signal, and then completes. Replace it with the experience your
-        customer needs.
-      </p>
-      <section class="card">
-        <h2 id="phase">Ready</h2>
-        <p id="message">Start the demonstration to verify the setup.</p>
-        <button id="start">Start demo Workflow</button>
-        <button id="continue" hidden>Send continue Signal</button>
-        <p class="request-id" id="request-id"></p>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Juniper Salon · Staff</p>
+        <h1>Fill last-minute openings</h1>
+      </div>
+      <p class="note">Prototype. Texts, front-desk alerts and the waitlist sheet are <strong>simulated</strong>.</p>
+    </header>
+    <main class="layout">
+      <aside>
+        <section class="card">
+          <h2>New opening</h2>
+          <form id="new-opening">
+            <label>Service
+              <select name="service"><option>Haircut</option><option>Color</option><option>Blowout</option><option>Trim</option></select>
+            </label>
+            <label>Stylist
+              <select name="stylist"><option>Sam</option><option>Rosa</option><option>Taylor</option></select>
+            </label>
+            <label>Appointment time
+              <input type="datetime-local" name="startsAt" required />
+            </label>
+            <label>Time each client gets to reply
+              <select name="offerWindowMinutes">
+                <option value="15" selected>15 minutes (same-day)</option>
+                <option value="60">1 hour</option>
+                <option value="240">4 hours (later days, to confirm)</option>
+                <option value="1">1 minute (demo)</option>
+              </select>
+            </label>
+            <label>Stop trying this long before the appointment
+              <select name="cutoffMinutes">
+                <option value="60">1 hour</option>
+                <option value="90" selected>1.5 hours</option>
+                <option value="120">2 hours</option>
+              </select>
+            </label>
+            <button type="submit">Start filling this opening</button>
+          </form>
+        </section>
+        <section class="card">
+          <div class="row"><h2>Waitlist</h2><button class="link" id="reset">Reset demo data</button></div>
+          <table id="waitlist"></table>
+        </section>
+      </aside>
+      <section>
+        <div id="openings"><p class="empty">No openings yet. Create one when a client cancels.</p></div>
+        <p class="footer">Each opening is a durable Temporal Workflow. Inspect them at <a href="http://localhost:8233" target="_blank">localhost:8233</a>.</p>
       </section>
-      <p class="footer">
-        Inspect the execution at
-        <a href="http://localhost:8233" target="_blank">localhost:8233</a>.
-      </p>
     </main>
     <script src="/app.js"></script>
   </body>
 </html>
-

@@ -1,3 +1,18 @@
+# Juniper Salon: waitlist openings prototype
+
+When a client cancels, staff create an **opening**. A Temporal Workflow then offers it to matching waitlist clients **one at a time** (matching service, stylist preference and day, longest-waiting first). Each client gets a no-account link to accept or decline within a set window (15 minutes for same-day openings). The Workflow stops trying 1 to 2 hours before the appointment.
+
+- **No double-booking:** accept and decline are Temporal **Updates** with validators. Only the client currently holding the offer, inside their window, can claim it. Late, stale or repeated replies are rejected.
+- **Nothing falls through the cracks:** each offer window is a durable **timer**, so the opening moves to the next client even if no one is watching and even if the API or Worker restarts.
+- **Staff stay in control:** Skip, Cancel outreach and Book by hand are **Signals**. The dashboard reads live state through a **Query** (who holds the offer, time left, who declined or timed out, who's next).
+- **Notifications** (client texts and front-desk alerts) are **Activities** with retries.
+
+**Simulated:** SMS and front-desk notifications are logged, not sent; the Google Sheet waitlist is `data/waitlist.json`; staff still add the booking to Square by hand. **Not included:** staff login, adding clients to the waitlist from the UI, Square integration.
+
+Run `npm run dev`, open <http://localhost:3000> (staff) and use the "Open the client's offer link" links to act as the client. `npm test` covers timeout, decline, cancel and first-acceptance-wins.
+
+---
+
 # Temporal post-assessment starter
 
 This repository provides a working local Temporal environment, API, Worker, and browser interface. The included neutral demo is intentionally unrelated to the customer’s final process. Use what you learn in the customer conversation to replace it.

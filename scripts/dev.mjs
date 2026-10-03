@@ -26,11 +26,18 @@ async function waitForPort(port, timeoutMs = 60_000) {
   throw new Error(`Temporal did not become ready on port ${port}.`);
 }
 
+// On Windows, "npm" is npm.cmd and cannot be spawned without a shell, so run
+// npm's JS entry point with Node directly when it is available.
+function runScript(name) {
+  const npmCli = process.env.npm_execpath;
+  if (npmCli) {
+    return spawn(process.execPath, [npmCli, "run", name], { stdio: "inherit" });
+  }
+  return spawn(`npm run ${name}`, { stdio: "inherit", shell: true });
+}
+
 await waitForPort(7233);
-const children = [
-  spawn("npm", ["run", "dev:worker"], { stdio: "inherit" }),
-  spawn("npm", ["run", "dev:api"], { stdio: "inherit" }),
-];
+const children = [runScript("dev:worker"), runScript("dev:api")];
 let shuttingDown = false;
 function shutdown(exitCode = 0) {
   if (shuttingDown) return;
